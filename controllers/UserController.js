@@ -2,7 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
 
 const prisma = new PrismaClient();
-const User = prisma.users;
+const User = prisma.user;
 
 // Função para cadastrar um novo usuário
 const register = async (req, res) => {

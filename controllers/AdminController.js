@@ -3,7 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs"); // Incriptar senhas
 
 const prisma = new PrismaClient();
-const User = prisma.users;
+const User = prisma.user;
 
 const createAdmin = async (req, res) => {
 	try {

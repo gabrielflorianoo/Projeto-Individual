@@ -7,7 +7,8 @@ const authController = require('../controllers/AuthController');
 const AdminController = require('../controllers/AdminController');
 
 // Rota para criar um novo administrador
-router.post('/criar', authController.login, AdminController.createAdmin);
+router.post('/criar', AdminController.createAdmin);
+router.post('/token', authController.login);
 
 // Rota para excluir um usuário não administrador
 router.delete('/excluir/:userId', adminMiddleware, AdminController.deleteUser);

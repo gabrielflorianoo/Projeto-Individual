@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken"); // Gerar tokens
 const bcrypt = require("bcryptjs"); // Incriptar senhas
 
 const prisma = new PrismaClient();
-const User = prisma.users;
+const User = prisma.user;
 
 const login = async (req, res) => {
 	try {
