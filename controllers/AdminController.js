@@ -23,7 +23,7 @@ const createAdmin = async (req, res) => {
 			data: {
 				name: nome,
 				email: email,
-				pass: senha,
+				pass: bcrypt.hash(senha, 10),
 				isAdmin: true,
 			},
 		});
