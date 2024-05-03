@@ -8,8 +8,9 @@ datasource db {
 }
 
 model users {
-  id    Int     @id @default(autoincrement())
-  name  String? @db.VarChar(30)
-  pass  String? @db.VarChar(30)
-  email String? @db.VarChar(30)
+  id      Int      @id @default(autoincrement())
+  name    String?  @db.VarChar(30)
+  pass    String?  @db.VarChar(30)
+  email   String?  @db.VarChar(30)
+  isAdmin Boolean? @default(dbgenerated("(false)"))
 }
