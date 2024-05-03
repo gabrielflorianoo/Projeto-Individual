@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+require('dotenv').config();
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -10,8 +11,6 @@ const adminRouter = require("./routes/admin");
 const authRouter = require("./routes/auth");
 
 const app = express();
-
-const hash = "bcrypt123";
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

@@ -2,6 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
 
 const prisma = new PrismaClient();
+const User = prisma.users;
 
 // Função para cadastrar um novo usuário
 const register = async (req, res) => {
@@ -14,7 +15,7 @@ const register = async (req, res) => {
 		// Aqui você pode adicionar a lógica para validar os dados do usuário antes de criar
 		// Por exemplo, verificar se o e-mail já está cadastrado
 
-		const found = await prisma.users.findFirst({
+		const found = await User.findFirst({
 			where: {
 				OR: [{ name: nome }, { email: email }],
 			},
@@ -23,7 +24,7 @@ const register = async (req, res) => {
 		if (!found) {
 			const hashedPassword = await bcrypt.hash(senha, 10);
 
-			const newUser = await prisma.users.create({
+			const newUser = await User.create({
 				data: {
 					name: nome,
 					email: email,
@@ -53,13 +54,13 @@ const register = async (req, res) => {
 			error: "Erro ao cadastrar usuário. Por favor, tente novamente mais tarde.",
 		});
 	}
-}
+};
 
 const login = async (req, res) => {
 	try {
 		const { nome, email, senha } = req.body;
 
-		const found = await prisma.users.findFirst({
+		const found = await User.findFirst({
 			where: {
 				name: nome,
 				email: email,
@@ -86,7 +87,54 @@ const login = async (req, res) => {
 	}
 };
 
+const updateUser = async (req, res) => {
+	try {
+		const userId = req.user.userId;
+		const { nome, email, senha } = req.body;
+
+		// Verificar se o usuário existe no banco de dados
+		const user = await User.findFirst({
+			where: { id: userId },
+		});
+
+		if (!user) {
+			return res.status(404).json({ error: "Usuário não encontrado." });
+		}
+
+		// Verifica se a senha é igual a anterior
+		const hashedNewPassword = senha
+			? await bcrypt.hash(senha, 10)
+			: user.pass; // Hash da nova senha se fornecida
+		const senhaIgual = await bcrypt.compare(senha, user.pass); // Verifica se a nova senha é igual à antiga
+
+		// Atualizar os dados pessoais do usuário
+		const updatedUser = await User.update({
+			where: { id: userId },
+			data: {
+				name: nome || user.name, // Atualiza o nome se fornecido no corpo da requisição
+				email: email || user.email, // Atualiza o email se fornecido no corpo da requisição
+				pass: senhaIgual ? user.pass : hashedNewPassword, // Hash da senha se fornecida
+			},
+		});
+
+		if (!updatedUser) {
+			return res.status(404).json({ error: "Erro ocorreu ao atualizar os dados do usuário." });
+		}
+
+		// Retornar uma resposta de sucesso
+		return res
+			.status(200)
+			.json({ message: "Dados pessoais atualizados com sucesso!" });
+	} catch (error) {
+		console.error("Erro ao atualizar dados pessoais do usuário:", error);
+		return res.status(500).json({
+			error: "Erro ao atualizar dados pessoais do usuário. Por favor, tente novamente mais tarde.",
+		});
+	}
+};
+
 module.exports = {
 	register,
 	login,
+	updateUser,
 };
