@@ -5,6 +5,6 @@ const router = express.Router();
 const UserController = require('../controllers/UserController');
 
 // Rota para cadastro de usuários
-router.post('/registrar', UserController.register);
+router.post('/registrar', UserController.register); // Middleware de criar usuários
 
 module.exports = router;
