@@ -1,5 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 
+const bcrypt = require("bcryptjs"); // Incriptar senhas
+
 const prisma = new PrismaClient();
 const User = prisma.users;
 
@@ -23,7 +25,7 @@ const createAdmin = async (req, res) => {
 			data: {
 				name: nome,
 				email: email,
-				pass: bcrypt.hash(senha, 10),
+				pass: await bcrypt.hash(senha, 10),
 				isAdmin: true,
 			},
 		});

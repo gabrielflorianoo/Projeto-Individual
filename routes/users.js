@@ -3,6 +3,8 @@ const router = express.Router();
 
 // Importar o controller de usuários
 const UserController = require("../controllers/UserController");
+
+// Importar o middleware de autenticação
 const authMiddleware = require("../middlewares/authMiddleware");
 
 // Rota para cadastro de usuários
