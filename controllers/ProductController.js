@@ -5,12 +5,12 @@ const createProduct = async (req, res) => {
 	try {
 		// Extrair os dados do corpo da requisição
 		const { nome, preco, userId } = req.body;
-        userId = parseInt(userId);
+        const id = parseInt(userId);
 
 		// Verificar se o usuário existe
 		const user = await prisma.user.findUnique({
 			where: {
-				id: userId,
+				id: id,
 			},
 		});
 
@@ -24,7 +24,7 @@ const createProduct = async (req, res) => {
 				name: nome,
 				price: preco,
 				user: {
-					connect: { id: userId },
+					connect: { id: id },
 				},
 			},
 		});
