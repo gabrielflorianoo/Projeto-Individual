@@ -4,6 +4,19 @@ const bcrypt = require("bcryptjs");
 const prisma = new PrismaClient();
 const User = prisma.user;
 
+// Função para mostrar todos os usuários
+const showUsers = async (req, res) => {
+	try {
+		console.log("Fetching users...");
+		const users = await User.findMany();
+		console.log("Users fetched:", users);
+		res.status(200).json(users);
+	} catch (error) {
+		console.error("Erro ao buscar usuários:", error);
+		res.status(500).json({ error: "Erro ao buscar usuários." });
+	}
+};
+
 // Função para cadastrar um novo usuário
 const register = async (req, res) => {
 	try {
@@ -118,7 +131,9 @@ const updateUser = async (req, res) => {
 		});
 
 		if (!updatedUser) {
-			return res.status(404).json({ error: "Erro ocorreu ao atualizar os dados do usuário." });
+			return res.status(404).json({
+				error: "Erro ocorreu ao atualizar os dados do usuário.",
+			});
 		}
 
 		// Retornar uma resposta de sucesso
@@ -133,8 +148,45 @@ const updateUser = async (req, res) => {
 	}
 };
 
+const deleteUser = async (req, res) => {
+	try {
+		const userId = req.user.userId;
+		const { nome, email, senha } = req.body;
+
+		// Verificar se o usuário existe no banco de dados
+		const user = await User.findFirst({
+			where: { id: userId },
+		});
+
+		if (!user) {
+			return res.status(404).json({ error: "Usuário não encontrado." });
+		}
+
+		// Verifica se a senha é igual a anterior
+		const hashedNewPassword = senha
+			? await bcrypt.hash(senha, 10)
+			: user.pass; // Hash da nova senha se fornecida
+		const senhaIgual = await bcrypt.compare(senha, user.pass); // Verifica se a nova senha é igual à antiga
+
+		// Deleta o usuário da base de dados
+		await User.delete({ where: { id: userId } });
+
+		// Retornar uma resposta de sucesso
+		return res
+			.status(200)
+			.json({ message: "Dados pessoais atualizados com sucesso!" });
+	} catch (error) {
+		console.error("Erro ao atualizar dados pessoais do usuário:", error);
+		return res.status(500).json({
+			error: "Erro ao atualizar dados pessoais do usuário. Por favor, tente novamente mais tarde.",
+		});
+	}
+};
+
 module.exports = {
+	showUsers,
 	register,
 	login,
 	updateUser,
+	deleteUser,
 };
