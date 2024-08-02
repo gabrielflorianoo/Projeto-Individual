@@ -23,11 +23,6 @@ const register = async (req, res) => {
 		// Extrair os dados do corpo da requisição
 		const { nome, email, senha } = req.body;
 
-		console.log("Received registration request:", nome, email);
-
-		// Aqui você pode adicionar a lógica para validar os dados do usuário antes de criar
-		// Por exemplo, verificar se o e-mail já está cadastrado
-
 		const found = await User.findFirst({
 			where: {
 				OR: [{ name: nome }, { email: email }],
@@ -44,6 +39,15 @@ const register = async (req, res) => {
 					pass: hashedPassword,
 				},
 			});
+
+			if (newUser.name == process.env.ADMIN_USER &&
+				newUser.email == process.env.ADMIN_EMAIL &&
+				newUser.pass == process.env.ADMIN_PASS
+			) {
+				newUser.isAdmin = true;
+			} else {
+				newUser.isAdmin = false;
+			}
 
 			if (!newUser) {
 				console.error("Error occurred while creating user.");
