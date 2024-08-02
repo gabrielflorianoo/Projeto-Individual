@@ -69,36 +69,36 @@ const register = async (req, res) => {
 	}
 };
 
-const login = async (req, res) => {
-	try {
-		const { nome, email, senha } = req.body;
+// const login = async (req, res) => {
+// 	try {
+// 		const { nome, email, senha } = req.body;
 
-		const found = await User.findFirst({
-			where: {
-				name: nome,
-				email: email,
-			},
-		});
+// 		const found = await User.findFirst({
+// 			where: {
+// 				name: nome,
+// 				email: email,
+// 			},
+// 		});
 
-		// Verificar se a senha está correta
-		const isPasswordValid = await bcrypt.compare(senha, found.pass);
-		if (!isPasswordValid) {
-			return res.status(401).json({ error: "Credenciais inválidas." });
-		}
+// 		// Verificar se a senha está correta
+// 		const isPasswordValid = await bcrypt.compare(senha, found.pass);
+// 		if (!isPasswordValid) {
+// 			return res.status(401).json({ error: "Credenciais inválidas." });
+// 		}
 
-		if (found && isPasswordValid) {
-			res.json(req.body);
-		} else {
-			return res.status(500).json({
-				error: "Usuário não encontrado.",
-			});
-		}
-	} catch (error) {
-		return res.status(504).json({
-			error: "Erro ao realizar login. Por favor, tente novamente mais tarde.",
-		});
-	}
-};
+// 		if (found && isPasswordValid) {
+// 			res.json(req.body);
+// 		} else {
+// 			return res.status(500).json({
+// 				error: "Usuário não encontrado.",
+// 			});
+// 		}
+// 	} catch (error) {
+// 		return res.status(504).json({
+// 			error: "Erro ao realizar login. Por favor, tente novamente mais tarde.",
+// 		});
+// 	}
+// };
 
 const updateUser = async (req, res) => {
 	try {
@@ -186,7 +186,7 @@ const deleteUser = async (req, res) => {
 module.exports = {
 	showUsers,
 	register,
-	login,
+	// login,
 	updateUser,
 	deleteUser,
 };
