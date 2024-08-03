@@ -3,8 +3,11 @@ const prisma = new PrismaClient();
 
 const createProduct = async (req, res) => {
 	try {
+		// Pegar o id do usuário pelo seu token
+		const userId = req.user.userId;
+
 		// Extrair os dados do corpo da requisição
-		const { nome, preco, userId } = req.body;
+		const { nome, preco } = req.body;
 		const id = parseInt(userId);
 
 		// Verificar se o usuário existe

@@ -6,7 +6,7 @@ const authMiddleware = require("../middlewares/authMiddleware.js");
 const ProductController = require("../controllers/ProductController");
 
 /* GET home page. */
-router.post("/criar", ProductController.createProduct);
+router.post("/criar", authMiddleware, ProductController.createProduct);
 
 router.delete("/excluir/:productId", authMiddleware, ProductController.deleteProduct);
 
