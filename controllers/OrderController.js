@@ -1,5 +1,48 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const Order = prisma.order;
+
+// Função para mostrar todas as ordens com paginação
+const showOrders = async (req, res) => {
+    try {
+        console.log("Fetching orders...");
+
+        // Extrair os parâmetros da query string
+        const { limite = 10, pagina = 1 } = req.query;
+
+        // Definir os valores permitidos para limite
+        const validLimits = [5, 10, 30];
+        const limit = parseInt(limite, 10);
+        const page = parseInt(pagina, 10);
+
+        if (!validLimits.includes(limit)) {
+            return res.status(400).json({ error: "Valor inválido para limite. Use 5, 10 ou 30." });
+        }
+
+        if (page < 1) {
+            return res.status(400).json({ error: "A página deve ser maior ou igual a 1." });
+        }
+
+        // Calcular o offset
+        const offset = (page - 1) * limit;
+
+        // Buscar ordens com paginação
+        const orders = await Order.findMany({
+            take: limit,
+            skip: offset,
+            include: {
+                product: true,
+                user: true
+            }
+        });
+
+        console.log("Orders fetched:", orders);
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error("Erro ao buscar ordens:", error);
+        res.status(500).json({ error: "Erro ao buscar ordens." });
+    }
+};
 
 const createOrder = async (req, res) => {
 	try {
@@ -82,6 +125,7 @@ const deleteOrder = async (req, res) => {
 };
 
 module.exports = {
+	showOrders,
 	createOrder,
 	deleteOrder,
 };

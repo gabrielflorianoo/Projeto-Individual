@@ -4,11 +4,42 @@ const bcrypt = require("bcryptjs");
 const prisma = new PrismaClient();
 const User = prisma.user;
 
-// Função para mostrar todos os usuários
+// Função para mostrar todos os usuários com paginação
 const showUsers = async (req, res) => {
 	try {
 		console.log("Fetching users...");
-		const users = await User.findMany();
+
+		// Extrair os parâmetros da query string
+		const { limite = 10, pagina = 1 } = req.query;
+
+		// Definir os valores permitidos para limite
+		const validLimits = [5, 10, 30];
+		const limit = parseInt(limite, 10);
+		const page = parseInt(pagina, 10);
+
+		if (!validLimits.includes(limit)) {
+			return res
+				.status(400)
+				.json({
+					error: "Valor inválido para limite. Use 5, 10 ou 30.",
+				});
+		}
+
+		if (page < 1) {
+			return res
+				.status(400)
+				.json({ error: "A página deve ser maior ou igual a 1." });
+		}
+
+		// Calcular o offset
+		const offset = (page - 1) * limit;
+
+		// Buscar usuários com paginação
+		const users = await User.findMany({
+			take: limit,
+			skip: offset,
+		});
+
 		console.log("Users fetched:", users);
 		res.status(200).json(users);
 	} catch (error) {
@@ -137,9 +168,7 @@ const deleteUser = async (req, res) => {
 		await User.delete({ where: { id: userId } });
 
 		// Retornar uma resposta de sucesso
-		return res
-			.status(200)
-			.json({ message: "Conta deletada com sucesso!" });
+		return res.status(200).json({ message: "Conta deletada com sucesso!" });
 	} catch (error) {
 		console.error("Erro ao deletar conta pessoal:", error);
 		return res.status(500).json({
