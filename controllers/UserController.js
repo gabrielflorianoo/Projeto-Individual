@@ -40,15 +40,6 @@ const register = async (req, res) => {
 				},
 			});
 
-			if (newUser.name == process.env.ADMIN_USER &&
-				newUser.email == process.env.ADMIN_EMAIL &&
-				newUser.pass == process.env.ADMIN_PASS
-			) {
-				newUser.isAdmin = true;
-			} else {
-				newUser.isAdmin = false;
-			}
-
 			if (!newUser) {
 				console.error("Error occurred while creating user.");
 				return res.status(500).json({
@@ -72,37 +63,6 @@ const register = async (req, res) => {
 		});
 	}
 };
-
-// const login = async (req, res) => {
-// 	try {
-// 		const { nome, email, senha } = req.body;
-
-// 		const found = await User.findFirst({
-// 			where: {
-// 				name: nome,
-// 				email: email,
-// 			},
-// 		});
-
-// 		// Verificar se a senha está correta
-// 		const isPasswordValid = await bcrypt.compare(senha, found.pass);
-// 		if (!isPasswordValid) {
-// 			return res.status(401).json({ error: "Credenciais inválidas." });
-// 		}
-
-// 		if (found && isPasswordValid) {
-// 			res.json(req.body);
-// 		} else {
-// 			return res.status(500).json({
-// 				error: "Usuário não encontrado.",
-// 			});
-// 		}
-// 	} catch (error) {
-// 		return res.status(504).json({
-// 			error: "Erro ao realizar login. Por favor, tente novamente mais tarde.",
-// 		});
-// 	}
-// };
 
 const updateUser = async (req, res) => {
 	try {
@@ -155,7 +115,8 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
 	try {
 		const userId = req.user.userId;
-		const { nome, email, senha } = req.body;
+		console.log(userId);
+		const { senha } = req.body;
 
 		// Verificar se o usuário existe no banco de dados
 		const user = await User.findFirst({
@@ -178,11 +139,11 @@ const deleteUser = async (req, res) => {
 		// Retornar uma resposta de sucesso
 		return res
 			.status(200)
-			.json({ message: "Dados pessoais atualizados com sucesso!" });
+			.json({ message: "Conta deletada com sucesso!" });
 	} catch (error) {
-		console.error("Erro ao atualizar dados pessoais do usuário:", error);
+		console.error("Erro ao deletar conta pessoal:", error);
 		return res.status(500).json({
-			error: "Erro ao atualizar dados pessoais do usuário. Por favor, tente novamente mais tarde.",
+			error: "Erro ao deletar conta. Por favor, tente novamente mais tarde.",
 		});
 	}
 };
@@ -190,7 +151,6 @@ const deleteUser = async (req, res) => {
 module.exports = {
 	showUsers,
 	register,
-	// login,
 	updateUser,
 	deleteUser,
 };

@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon -e js,json,mustache ./bin/www"
+    "start": "nodemon -e js,json,mustache ./bin/www",
+    "init:admin": "node initAdmin.js"
   },
   "dependencies": {
     "@prisma/client": "^5.13.0",
@@ -20,6 +21,8 @@
     "mysql2": "^3.11.0",
     "nodemon": "^3.1.0",
     "pg": "^8.12.0",
-    "prisma": "^5.13.0"
+    "prisma": "^5.13.0",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.1"
   }
 }
