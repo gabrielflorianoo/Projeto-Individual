@@ -7,7 +7,6 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 require('dotenv').config();
 
-
 const authRouter = require("./routes/auth");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -23,9 +22,9 @@ var options = {
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "jade");
+// view engine setup (não precisa no projeto)
+// app.set("views", path.join(__dirname, "views"));
+// app.set("view engine", "jade");
 
 app.use(logger("dev"));
 app.use(express.json());

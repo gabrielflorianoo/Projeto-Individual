@@ -1,8 +1,6 @@
-const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
-
-const prisma = new PrismaClient();
-const User = prisma.user;
+const { User } = require("../Sequelize/Models.js");
+const { Op } = require('sequelize');
 
 // Função para mostrar todos os usuários com paginação
 const showUsers = async (req, res) => {
@@ -35,9 +33,9 @@ const showUsers = async (req, res) => {
 		const offset = (page - 1) * limit;
 
 		// Buscar usuários com paginação
-		const users = await User.findMany({
-			take: limit,
-			skip: offset,
+		const users = await User.findAll({
+			limit: limit,
+			offset: offset,
 		});
 
 		console.log("Users fetched:", users);
@@ -54,21 +52,21 @@ const register = async (req, res) => {
 		// Extrair os dados do corpo da requisição
 		const { nome, email, senha } = req.body;
 
-		const found = await User.findFirst({
+		// Verificar se já existe um usuário com o mesmo nome ou email
+		const found = await User.findOne({
 			where: {
-				OR: [{ name: nome }, { email: email }],
+				[Op.or]: [{ name: nome }, { email: email }],
 			},
 		});
 
 		if (!found) {
 			const hashedPassword = await bcrypt.hash(senha, 10);
 
+			// Criar o novo usuário
 			const newUser = await User.create({
-				data: {
-					name: nome,
-					email: email,
-					pass: hashedPassword,
-				},
+				name: nome,
+				email: email,
+				pass: hashedPassword,
 			});
 
 			if (!newUser) {
@@ -101,9 +99,7 @@ const updateUser = async (req, res) => {
 		const { nome, email, senha } = req.body;
 
 		// Verificar se o usuário existe no banco de dados
-		const user = await User.findFirst({
-			where: { id: userId },
-		});
+		const user = await User.findByPk(userId);
 
 		if (!user) {
 			return res.status(404).json({ error: "Usuário não encontrado." });
@@ -116,13 +112,10 @@ const updateUser = async (req, res) => {
 		const senhaIgual = await bcrypt.compare(senha, user.pass); // Verifica se a nova senha é igual à antiga
 
 		// Atualizar os dados pessoais do usuário
-		const updatedUser = await User.update({
-			where: { id: userId },
-			data: {
-				name: nome || user.name, // Atualiza o nome se fornecido no corpo da requisição
-				email: email || user.email, // Atualiza o email se fornecido no corpo da requisição
-				pass: senhaIgual ? user.pass : hashedNewPassword, // Hash da senha se fornecida
-			},
+		const updatedUser = await user.update({
+			name: nome || user.name, // Atualiza o nome se fornecido no corpo da requisição
+			email: email || user.email, // Atualiza o email se fornecido no corpo da requisição
+			pass: senhaIgual ? user.pass : hashedNewPassword, // Hash da senha se fornecida
 		});
 
 		if (!updatedUser) {
@@ -146,26 +139,26 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
 	try {
 		const userId = req.user.userId;
-		console.log(userId);
 		const { senha } = req.body;
 
 		// Verificar se o usuário existe no banco de dados
-		const user = await User.findFirst({
-			where: { id: userId },
-		});
+		const user = await User.findByPk(userId);
 
 		if (!user) {
 			return res.status(404).json({ error: "Usuário não encontrado." });
 		}
 
 		// Verifica se a senha é igual a anterior
-		const hashedNewPassword = senha
-			? await bcrypt.hash(senha, 10)
-			: user.pass; // Hash da nova senha se fornecida
 		const senhaIgual = await bcrypt.compare(senha, user.pass); // Verifica se a nova senha é igual à antiga
 
+		if (!senhaIgual) {
+			return res.status(403).json({
+				error: "Senha incorreta.",
+			});
+		}
+
 		// Deleta o usuário da base de dados
-		await User.delete({ where: { id: userId } });
+		await User.destroy({ where: { id: userId } });
 
 		// Retornar uma resposta de sucesso
 		return res.status(200).json({ message: "Conta deletada com sucesso!" });
