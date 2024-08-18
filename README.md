@@ -66,10 +66,7 @@ npm install
 #### Edite as variáveis de ambiente
 
 ```bash
-DB_HOST=localhost
-DB_USER=seu-usuario
-DB_PASS=sua-senha
-DB_NAME=nome-do-banco
+DATABASE_URL=`mysql://"nome-usuário":"senha"@"host":"porta"/projind2564149?schema=public`
 ```
 
 #### Rode o código
