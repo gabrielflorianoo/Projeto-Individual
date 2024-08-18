@@ -44,6 +44,7 @@ Este projeto foi desenvolvido como parte da disciplina de Programação Web-Back
 - `/products`: Rota para gerenciamento de produtos.
 - `/orders`: Rota para gerenciamento de pedidos.
 - `/docs`: Rota para acessar a documentação da API via Swagger.
+- `/install`: Rota para receber o código de criação do banco de dados mysql 
 
 ## Instalação e Execução
 
@@ -57,22 +58,22 @@ Este projeto foi desenvolvido como parte da disciplina de Programação Web-Back
 1. Clone o repositório para sua máquina local:
 
 ```bash
-    git clone https://github.com/seu-usuario/seu-repositorio.git
-    cd seu-repositorio
-    npm install
+git clone https://github.com/seu-usuario/seu-repositorio.git
+cd seu-repositorio
+npm install
 ```
 
 #### Edite as variáveis de ambiente
 
 ```bash
-    DB_HOST=localhost
-    DB_USER=seu-usuario
-    DB_PASS=sua-senha
-    DB_NAME=nome-do-banco
+DB_HOST=localhost
+DB_USER=seu-usuario
+DB_PASS=sua-senha
+DB_NAME=nome-do-banco
 ```
 
 #### Rode o código
 
 ```bash
-    npm start
+npm start
 ```
