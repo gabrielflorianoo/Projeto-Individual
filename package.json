@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "prestart": "node swagger.js",
     "start": "nodemon -e js,json,mustache ./bin/www",
     "init:admin": "node initAdmin.js"
   },

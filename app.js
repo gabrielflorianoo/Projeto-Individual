@@ -16,7 +16,7 @@ const orderRoutes = require('./routes/orders');
 
 const app = express();
 
-var options = {
+const options = {
   explorer: true
 };
 

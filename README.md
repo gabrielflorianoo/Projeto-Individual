@@ -76,3 +76,10 @@ Este projeto foi desenvolvido como parte da disciplina de Programação Web-Back
 ```bash
     npm start
 ```
+
+
+#### Inicie o BD
+
+- Vá para a rota /install e faça um método GET
+- Nessa rota você conseguirá o código para criação e população automática do banco de dados
+- Por ultimo digite ```bash npm init:admin``` para criar o primeiro admin do projeto (precisa ser feito assim para que o admin original tenha uma senha cryptografada)
