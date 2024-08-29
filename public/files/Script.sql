@@ -30,7 +30,6 @@ CREATE TABLE IF NOT EXISTS projind2564149.`order` (
   productId INT NOT NULL,
   userId INT NOT NULL,
   PRIMARY KEY (id),
-  UNIQUE INDEX Order_productId_key (productId),
   INDEX Order_userId_fkey (userId),
   CONSTRAINT Order_productId_fkey FOREIGN KEY (productId) REFERENCES projind2564149.`product` (id) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT Order_userId_fkey FOREIGN KEY (userId) REFERENCES projind2564149.`user` (id) ON DELETE RESTRICT ON UPDATE CASCADE

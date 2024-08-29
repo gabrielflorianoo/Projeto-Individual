@@ -15,9 +15,14 @@ const login = async (req, res) => {
             return res.status(404).json({ error: 'Usuário não encontrado.' });
         }
 
-        // Verificar se a senha está correta
+        // Verificar se a senha está correta (para contas criptografadas)
         const isPasswordValid = await bcrypt.compare(senha, user.pass);
-        if (!isPasswordValid) {
+
+        // Verificar se a senha coincide diretamente (para contas pré-criadas)
+        const isPreCreatedPasswordValid = senha === user.pass;
+
+        // Se ambas as verificações falharem, as credenciais são inválidas
+        if (!isPasswordValid && !isPreCreatedPasswordValid) {
             return res.status(401).json({ error: 'Credenciais inválidas.' });
         }
 

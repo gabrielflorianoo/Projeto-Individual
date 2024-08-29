@@ -43,4 +43,4 @@ async function createDefaultAdmin() {
     }
 }
 
-module.exports = createDefaultAdmin;
+createDefaultAdmin();
