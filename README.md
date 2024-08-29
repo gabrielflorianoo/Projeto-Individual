@@ -80,4 +80,4 @@ npm start
 
 - Vá para a rota /install e faça um método GET
 - Nessa rota você conseguirá o código para criação e população automática do banco de dados
-- Por ultimo digite ```npm init:admin``` para criar o primeiro admin do projeto (precisa ser feito assim para que o admin original tenha uma senha cryptografada)
+- Por ultimo digite ```npm run init:admin``` para criar o primeiro admin do projeto (precisa ser feito assim para que o admin original tenha uma senha cryptografada)
