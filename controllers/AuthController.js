@@ -2,6 +2,7 @@ const { User } = require('../Sequelize/Models.js');
 const jwt = require('jsonwebtoken'); // Gerar tokens
 const bcrypt = require('bcryptjs'); // Incriptar senhas
 
+// Rota para fazer login
 const login = async (req, res) => {
     try {
         const { email, senha } = req.body;

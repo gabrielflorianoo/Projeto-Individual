@@ -43,6 +43,7 @@ const showProducts = async (req, res) => {
     }
 };
 
+// Função para cadastrar um novo produto
 const createProduct = async (req, res) => {
     try {
         // Pegar o id do usuário pelo seu token
@@ -80,6 +81,7 @@ const createProduct = async (req, res) => {
     }
 };
 
+// Função para excluir um produto
 const deleteProduct = async (req, res) => {
     try {
         const productId = parseInt(req.params.productId);

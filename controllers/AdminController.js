@@ -1,6 +1,7 @@
 const { User } = require('../Sequelize/Models.js');
 const bcrypt = require('bcryptjs');
 
+// Função para criar um novo administrador
 const createAdmin = async (req, res) => {
     try {
         const { nome, email, senha } = req.body;
@@ -39,6 +40,7 @@ const createAdmin = async (req, res) => {
     }
 };
 
+// Função para excluir um usuário não administrador
 const deleteUser = async (req, res) => {
     try {
         const userId = parseInt(req.params.userId);

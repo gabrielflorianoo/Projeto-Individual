@@ -1,6 +1,6 @@
 const { User, Order, Product } = require('../Sequelize/Models.js');
 
-// Função para mostrar todas as ordens com paginação
+// Função para mostrar todos os pedidos com paginação
 const showOrders = async (req, res) => {
     try {
         console.log('Fetching orders...');
@@ -43,6 +43,7 @@ const showOrders = async (req, res) => {
     }
 };
 
+// Função para cadastrar um novo pedido
 const createOrder = async (req, res) => {
     try {
         // Extrair os dados do corpo da requisição
@@ -82,6 +83,7 @@ const createOrder = async (req, res) => {
     }
 };
 
+// Função para excluir um pedido
 const deleteOrder = async (req, res) => {
     try {
         const orderId = parseInt(req.params.orderId);

@@ -1,6 +1,38 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./server.js');
 
+/**
+ * Modelo Sequelize para a tabela de usuários.
+ *
+ * @typedef {Object} User
+ * @property {string} name - Nome do usuário.
+ * @property {string} email - Email do usuário, deve ser único.
+ * @property {string} pass - Senha do usuário.
+ * @property {boolean} isAdmin - Indica se o usuário é administrador.
+ */
+
+/**
+ * Modelo Sequelize para a tabela de pedidos.
+ *
+ * @typedef {Object} Order
+ * @property {number} quantity - Quantidade do produto a ser pedido.
+ * @property {number} userId - ID do usuário que fez o pedido.
+ * @property {number} productId - ID do produto comprado.
+ */
+
+/**
+ * Modelo Sequelize para a tabela de produtos.
+ *
+ * @typedef {Object} Product
+ * @property {string} name - Nome do produto.
+ * @property {number} price - Preço do produto.
+ * @property {number} userId - ID do usuário que criou/vendeu o produto.
+ */
+
+/**
+ * Define o modelo de dados para o usuário.
+ * @type {ModelCtor<User>}
+ */
 const User = sequelize.define(
     'User',
     {
@@ -32,6 +64,10 @@ const User = sequelize.define(
     }
 );
 
+/**
+ * Define o modelo de dados para os pedidos.
+ * @type {ModelCtor<Order>}
+ */
 const Order = sequelize.define(
     'Order',
     {
@@ -57,6 +93,10 @@ const Order = sequelize.define(
     }
 );
 
+/**
+ * Define o modelo de dados para os produtos.
+ * @type {ModelCtor<Product>}
+ */
 const Product = sequelize.define(
     'Product',
     {
